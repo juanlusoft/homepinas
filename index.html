@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePiNAS v2.0.0</title>
+    <link rel="stylesheet" href="/frontend/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>HomePiNAS</h1>
+                <span class="version">v2.0.0</span>
+            </div>
+            <ul class="nav-menu">
+                <li>
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <span class="nav-icon">&#9632;</span>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-page="storage">
+                        <span class="nav-icon">&#9642;</span>
+                        Storage
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-page="shares">
+                        <span class="nav-icon">&#9830;</span>
+                        Shares
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link" data-page="settings">
+                        <span class="nav-icon">&#9881;</span>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <header class="page-header">
+                    <h2>Dashboard</h2>
+                </header>
+                <div id="storage-dashboard" class="dashboard-content">
+                    <p>Loading...</p>
+                </div>
+            </div>
+
+            <!-- Storage Page -->
+            <div id="storage-page" class="page">
+                <header class="page-header">
+                    <h2>Storage Array Setup</h2>
+                    <p class="subtitle">Configure NonRAID protection</p>
+                </header>
+
+                <div id="storage-setup-container">
+                    <!-- Info Banner -->
+                    <div class="info-banner">
+                        <h4>Disk Roles</h4>
+                        <ul class="role-info">
+                            <li>
+                                <strong>Data:</strong> Each disk mounts independently at /mnt/diskN
+                            </li>
+                            <li>
+                                <strong>Parity:</strong> Real-time protection (NonRAID kernel driver)
+                            </li>
+                        </ul>
+                        <div class="note">
+                            <strong>Note:</strong> Each data disk mounted at /mnt/disk[N]
+                        </div>
+                    </div>
+
+                    <!-- Disk Selection -->
+                    <div class="disk-selection">
+                        <h3>Available Disks</h3>
+                        <p id="disk-selection-status" class="selection-status"></p>
+                        <div id="disk-list" class="disk-list">
+                            <p>Loading disks...</p>
+                        </div>
+                    </div>
+
+                    <!-- Share Mode Selector -->
+                    <div class="share-mode-selector">
+                        <h4>Samba Share Mode</h4>
+                        <select id="share-mode">
+                            <option value="individual">Individual shares (Disk1, Disk2...)</option>
+                            <option value="merged">Unified pool (requires MergerFS)</option>
+                            <option value="categories">By category (Media, Documents...)</option>
+                        </select>
+                        <div class="share-mode-help">
+                            <p id="share-mode-description">Each disk will be exposed as a separate network share.</p>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="actions">
+                        <button id="saveStorageBtn" class="btn btn-primary" onclick="saveStorageConfig()" disabled>
+                            Configure Array
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shares Page -->
+            <div id="shares-page" class="page">
+                <header class="page-header">
+                    <h2>Network Shares</h2>
+                </header>
+                <div id="shares-list" class="shares-content">
+                    <p>Loading shares...</p>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-page" class="page">
+                <header class="page-header">
+                    <h2>Settings</h2>
+                </header>
+                <div class="settings-content">
+                    <div class="setting-group">
+                        <h3>System Information</h3>
+                        <p>HomePiNAS v2.0.0</p>
+                        <p>Storage: NonRAID</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progress-modal" class="modal">
+        <div class="modal-content">
+            <h3>Configuring Storage Array</h3>
+            <div class="progress-steps">
+                <div id="step-partition" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Partitioning disks (GPT)</span>
+                </div>
+                <div id="step-array" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Creating NonRAID array</span>
+                </div>
+                <div id="step-start" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Starting array</span>
+                </div>
+                <div id="step-filesystem" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Creating filesystems (XFS)</span>
+                </div>
+                <div id="step-mount" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Mounting disks</span>
+                </div>
+                <div id="step-samba" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Configuring Samba shares</span>
+                </div>
+                <div id="step-check" class="progress-step">
+                    <span class="step-indicator"></span>
+                    <span class="step-label">Initial parity sync</span>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div id="step-progress-bar" class="progress-bar"></div>
+            </div>
+            <p class="progress-note">Please wait, this may take several minutes...</p>
+        </div>
+    </div>
+
+    <script src="/frontend/main.js"></script>
+    <script>
+        // Share mode description update
+        document.getElementById('share-mode')?.addEventListener('change', function() {
+            const descriptions = {
+                'individual': 'Each disk will be exposed as a separate network share.',
+                'merged': 'All disks will be merged into a single share using MergerFS.',
+                'categories': 'Disks will be named by category (Media, Documents, etc.)'
+            };
+            document.getElementById('share-mode-description').textContent = descriptions[this.value];
+        });
+    </script>
+</body>
+</html>
