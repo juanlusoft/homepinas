@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh repo clone:*)",
+      "Bash(git clone:*)",
+      "Bash(tree:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nSecurity overhaul: Fix critical vulnerabilities\n\nSECURITY FIXES:\n- Implement bcrypt password hashing \\(SALT_ROUNDS=12\\)\n- Add session-based authentication with UUID tokens\n- Add authentication middleware for protected endpoints\n- Implement rate limiting \\(general, auth, critical actions\\)\n- Configure restrictive CORS policy\n- Add Helmet security headers\n- Add input validation for all user inputs\n- Add security event logging\n- Protect system endpoints \\(reboot, shutdown, reset\\)\n- Remove plaintext password storage\n\nFRONTEND FIXES:\n- Fix XSS vulnerabilities by escaping HTML output\n- Replace innerHTML with safe DOM manipulation\n- Implement missing functions \\(toggleDHCP, applyNetwork, openDDNSModal\\)\n- Add session management with localStorage persistence\n- Add authenticated fetch wrapper\n- Improve error handling throughout\n\nDEPENDENCIES ADDED:\n- bcrypt ^5.1.1\n- express-rate-limit ^7.5.0\n- helmet ^8.0.0\n- uuid ^11.1.0\n\nBumped version to 1.1.0\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git config:*)",
+      "Bash(git push:*)",
+      "Bash(git remote set-url origin https://juanlusoft:Mimora13.@github.com/juanlusoft/nas_nodejs.git)",
+      "Bash(git remote set-url:*)",
+      "Bash(git commit:*)",
+      "Bash(ls:*)",
+      "Bash(git reset:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)",
+      "Bash(git branch:*)",
+      "Bash(wc:*)",
+      "Bash(git checkout:*)",
+      "Bash(grep:*)",
+      "Bash(dir /s /b \"C:\\\\Users\\\\JLu\\\\AppData\\\\Local\\\\Temp\\\\homepinas*\")",
+      "Bash(node -e:*)",
+      "Bash(node create_modules.js:*)",
+      "Bash(node /tmp/homepinas-v2/create_modules.js:*)",
+      "Bash(python3:*)",
+      "Bash(chmod:*)",
+      "Bash(ssh:*)",
+      "Bash(git stash:*)",
+      "Bash(node add_routing.js:*)",
+      "Bash(git merge:*)",
+      "Bash(git fetch:*)",
+      "Bash(npm install)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(dir /s /b \"C:\\\\Users\\\\JLu\")",
+      "Bash(findstr:*)",
+      "Bash(dir \"C:\\\\Users\\\\JLu\\\\Desktop\\\\dashboard\")",
+      "Bash(git init:*)"
+    ]
+  }
+}
